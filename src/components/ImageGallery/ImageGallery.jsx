@@ -6,11 +6,11 @@ export const ImageGallery = ({items, toggleModal, setActiveImg, loadMore}) => {
   return (
     <>
       <ImageGalleryList> 
-      {items.map(item => {
+      {items.map((item, idx) => {
         return (
         <ImageGalleryItem
         item={item}
-        key={item.id}
+        key={item.idx}
         onClick={() => {
           toggleModal();
           setActiveImg(item.largeImageURL);

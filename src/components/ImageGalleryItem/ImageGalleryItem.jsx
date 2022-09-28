@@ -1,9 +1,18 @@
+import PropTypes from 'prop-types';
 import {ImageGalleryListItem, ImageGalleryListImg} from './ImageGalleryItem.styled';
 
-export const ImageGalleryItem = ({item, onClick}) => (
-    <ImageGalleryListItem onClick={onClick}>
+export const ImageGalleryItem = ({item, onClick}) => {
+const {webformatURL, tags, lagrImageURL} = item;
+return (
+<ImageGalleryListItem onClick={() => onClick(lagrImageURL)}>
       <ImageGalleryListImg
-      src={item.webformatURL}
-      alt={item.tags}/>
+      src={webformatURL}
+      alt={tags}/>
     </ImageGalleryListItem>
-  );
+);
+};
+  
+  ImageGalleryItem.protoTypes = {
+    item: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
+  }

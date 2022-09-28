@@ -23,23 +23,25 @@ export class App extends Component  {
   };
 
   componentDidMount() {
-    this.setState({items: []})
+    this.setState({items: []});
+
   };
 
   componentDidUpdate(_, prevState) {
     const {query, page} = this.state;
-    if(prevState.page !== page || prevState.query !== query) {
+    if(prevState.page !== page || 
+      prevState.query !== query) {
       this.setState({isLoading: true}); 
       if (page === 1) {
         this.setState({items: []});
       };
-      this.fetchGalleryItems();
+      this.fetchGalleryItems(page);
     }
   };
 
-  fetchGalleryItems = () => {
-    const {query, page} = this.state;
-    getApi(query, page)
+  fetchGalleryItems = page => {
+    // const {query, page} = this.state;
+    getApi(page)
     .then(res => {
       this.setState(prevState => ({
         items: [...prevState.items, ...res],
@@ -66,24 +68,23 @@ export class App extends Component  {
 
   toggleModal = () => {
     this.setState(({showModal}) => ({
-        showModal: !showModal
+        showModal: !showModal,
       }))
 }; 
 
 handleSubmit = evt => {
-  evt.prevenDefault();
-  this.setState({
-      query: '',
-      page: 1,
-      isLoading: false,
-      items: [],
-    });
-    evt.target.reset()
+  evt.preventDefault();
+  if(this.state.query.trim() === '') {
+    toast.error('Please, enter search query');
+    return;
   };
 
+  this.props.onSubmit(this.state.query);
+  this.setState({query: ''});
+};
 
 setActiveImg = activeImg => {
-  this.setState({activeImg});
+  this.setState({showModal: true, activeImg: activeImg});
 };
 
   render () {
@@ -96,15 +97,17 @@ setActiveImg = activeImg => {
     {items.length !== 0 && (
     <ImageGallery 
       items={items}
-      toggleModal={this.toggleModal}
+      // toggleModal={this.toggleModal}
       loadMore={this.loadMore}
       setActiveImg={this.setActiveImg}
       />
       )}
     {items.length > 0 && <Button onClick={this.loadMore} loading={this.state.isLoading}/>}
+    <button type='button' onClick={this.toggleModal}></button>
     {showModal && (
-    <Modal onClose={this.toggleModal} activeImg={activeImg} 
-      />
+    <Modal onClose={this.toggleModal} activeImg={activeImg}>
+      <img src={activeImg} alt="modal url" />
+    </Modal>
     )}
     <ToastContainer autoClose={3000} />
   </AppBox>

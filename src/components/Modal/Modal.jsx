@@ -9,6 +9,7 @@ export class Modal extends Component {
 
     static propTypes = {
         onClose: PropTypes.func.isRequired,
+        activeImg: PropTypes.string.isRequired,
     }; 
 
     componentDidMount() {
@@ -34,12 +35,14 @@ export class Modal extends Component {
     };
 
     render() {
+        const {activeImg} = this.props;
         return createPortal(
             <Overlay onClick={this.handleBackdrop}>
                 <ModalImg>
-                <img src={this.props.activeImg} alt="modal url" />
+                <img src={activeImg} alt="" />
                 </ModalImg>
-            </Overlay>, modalRoot
+            </Overlay>, 
+            modalRoot,
         );
     }
 }

@@ -5,12 +5,13 @@ import {SearchBarBox, SearchBarForm, SearchBarBtn, SearchBarLabel, SearchBarInpu
 
 export const SearchBar = ({onSubmit}) => {
 
-  const handleSubmit = (values, actions) => {
-    if(values.query.trim() === '') {
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    if(!evt.target.value.trim() === '') {
       return toast.error('Please, enter search query');
     }
-    onSubmit(values);
-    actions.resetForm();
+  
+    evt.target.reset();
   };
 
   return (

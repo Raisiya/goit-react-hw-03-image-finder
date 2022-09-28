@@ -11,4 +11,4 @@ export const getApi = async (query, page, per_page) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
